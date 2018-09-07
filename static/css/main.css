@@ -1,0 +1,32 @@
+body {
+    background-color: #fff;
+    font-family: "Rakkas", serif;
+    margin: 20px;
+    outline: 1px solid black;
+    text-align: center;
+}
+
+h1 {
+    text-decoration: underline;
+}
+
+
+button {
+    font-family: "Rakkas", serif;
+    font-size: 1.5em;
+    background-color: #000;
+    border: 0;
+    color: #fff;
+    line-height: 2;
+    margin-top: .5rem;
+    width: 100%;
+
+    /* Media Queries */
+    @media (min-width: 37.5em) {
+      width: auto; /* Smaller buttons on larger screens */
+      padding-left: 2rem;
+      padding-right: 2rem;
+      margin-left: 1rem;
+      margin-right: 1rem;
+    } 
+}

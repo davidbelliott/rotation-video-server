@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Rakkas" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    </head>
+    <body>
+        <h1 id="title">Averoid Adventures</h1>
+        <div id="buttons"></div>
+    </body>
+</html>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io('http://' + document.domain + ':' + location.port);
+    socket.on('connect', function() {
+        socket.emit('join', {is_movie_player: false});
+        console.log("Joined user room");
+    });
+    socket.on('show_choice', function(choice) {
+        console.log(choice);
+        var title_element = document.getElementById('title');
+        var buttons_element = document.getElementById('buttons');
+        title_element.innerHTML = choice.prompt;
+        var buttons = document.getElementById('buttons');
+        for(let name of Object.keys(choice.options)) {
+            let text = choice.options[name].text
+            let b = document.createElement("button");
+            let t = document.createTextNode(text);
+            console.log(name + ":" + text);
+            b.appendChild(t);
+            b.addEventListener("click", function() {
+                socket.emit('cast_vote', name);
+                clear_page();
+            });
+            buttons_element.appendChild(b);
+        }
+    });
+    socket.on('clear_choice', function() {
+        clear_page();
+    });
+    function clear_page() {
+        var title_element = document.getElementById('title');
+        var buttons_element = document.getElementById('buttons');
+        title_element.innerHTML = 'Averoid Adventures';
+        buttons_element.innerHTML = '';
+    }
+
+    window.onload = function() {
+        clear_page();
+    }
+</script>
