@@ -3,6 +3,8 @@ from flask_socketio import SocketIO, join_room, leave_room, send, emit
 
 app = Flask(__name__)
 socketio = SocketIO(app)
+current_room_index = 0
+NUM_PLAYER_ROOMS = 6
 
 @app.route('/')
 def index():
@@ -22,6 +24,7 @@ def test_connect():
 
 @socketio.on('join')
 def on_join(data):
+    global current_room_index
     print('Joining')
     is_player = data['is_movie_player']
     if is_player:
@@ -29,6 +32,9 @@ def on_join(data):
         join_room('movie_players')
     else:
         join_room('users')
+        join_room(str(current_room_index))
+        print('Joined room index: {}'.format(current_room_index))
+        current_room_index = (current_room_index + 1) % NUM_PLAYER_ROOMS
 
 @socketio.on('leave')
 def on_leave(data):
@@ -48,7 +54,10 @@ def handle_cast_vote(vote):
 @socketio.on('show_choice')
 def handle_show_choice(choice):
     print("Show choice: " + choice["prompt"])
-    emit('show_choice', choice, room='users')
+    if choice["room"]:
+        emit('show_choice', choice, room=choice["room"])
+    else:
+        emit('show_choice', choice, room='users')
 
 @socketio.on('clear_choice')
 def handle_clear_choice(choice):

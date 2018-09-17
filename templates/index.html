@@ -23,7 +23,7 @@
         title_element.innerHTML = choice.prompt;
         var buttons = document.getElementById('buttons');
         for(let name of Object.keys(choice.options)) {
-            let text = choice.options[name].text
+            let text = choice.options[name]
             let b = document.createElement("button");
             let t = document.createTextNode(text);
             console.log(name + ":" + text);
