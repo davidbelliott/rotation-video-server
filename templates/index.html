@@ -16,12 +16,14 @@
         socket.emit('join', {is_movie_player: false});
         console.log("Joined user room");
     });
+    socket.on('disconnect', clear_page());
     socket.on('show_choice', function(choice) {
         console.log(choice);
         var title_element = document.getElementById('title');
         var buttons_element = document.getElementById('buttons');
         title_element.innerHTML = choice.prompt;
         var buttons = document.getElementById('buttons');
+        buttons.innerHTML = '';
         for(let name of Object.keys(choice.options)) {
             let text = choice.options[name]
             let b = document.createElement("button");

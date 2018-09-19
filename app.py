@@ -60,7 +60,7 @@ def handle_show_choice(choice):
         emit('show_choice', choice, room='users')
 
 @socketio.on('clear_choice')
-def handle_clear_choice(choice):
+def handle_clear_choice():
     print("Clear choice")
     emit('clear_choice', room='users')
 
