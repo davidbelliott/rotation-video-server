@@ -1,23 +1,21 @@
 body {
-    background-color: #fff;
-    font-family: "Rakkas", serif;
+    background-color: #00f;
+    color: #fff;
     margin: 20px;
-    outline: 1px solid black;
     text-align: center;
+    font-family: "Rakkas", serif;
 }
 
 h1 {
-    text-decoration: underline;
+    font-weight: normal;
 }
-
 
 button {
     font-family: "Rakkas", serif;
-    font-size: 1.5em;
-    background-color: #000;
+    font-size: 1em;
+    background-color: #fff;
     border: 0;
-    color: #fff;
-    line-height: 2;
+    color: #00f;
     margin-top: .5rem;
     width: 100%;
 
@@ -29,4 +27,9 @@ button {
       margin-left: 1rem;
       margin-right: 1rem;
     } 
+}
+
+#buttons {
+    font-family: "Rakkas", serif;
+    font-size: 1.5em;
 }

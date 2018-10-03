@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="https://fonts.googleapis.com/css?family=Rakkas" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="//fonts.googleapis.com/css?family=Rakkas" rel="stylesheet">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     </head>
     <body>
@@ -9,14 +10,15 @@
         <div id="buttons"></div>
     </body>
 </html>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 <script type="text/javascript" charset="utf-8">
-    var socket = io('http://' + document.domain + ':' + location.port);
+    console.log("Document domain:" + document.domain);
+    var socket = io.connect('//' + document.domain + ':' + location.port);
     socket.on('connect', function() {
-        socket.emit('join', {is_movie_player: false});
+        socket.emit('join', {is_movie_player: false, voted: getCookieValue('voted')});
         console.log("Joined user room");
     });
-    socket.on('disconnect', clear_page());
+    socket.on('disconnect', clear_page(''));
     socket.on('show_choice', function(choice) {
         console.log(choice);
         var title_element = document.getElementById('title');
@@ -32,22 +34,27 @@
             b.appendChild(t);
             b.addEventListener("click", function() {
                 socket.emit('cast_vote', name);
-                clear_page();
+                clear_page('Vote cast');
+                console.log("Voted: " + choice.uuid);
+                document.cookie="voted=" + choice.uuid;
             });
             buttons_element.appendChild(b);
         }
     });
     socket.on('clear_choice', function() {
-        clear_page();
+        clear_page('');
     });
-    function clear_page() {
+    function clear_page(body_text) {
         var title_element = document.getElementById('title');
         var buttons_element = document.getElementById('buttons');
         title_element.innerHTML = 'Averoid Adventures';
-        buttons_element.innerHTML = '';
+        buttons_element.innerHTML = body_text;
     }
-
+    function getCookieValue(a) {
+        var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
+        return b ? b.pop() : '';
+    }
     window.onload = function() {
-        clear_page();
+        clear_page('');
     }
 </script>
